@@ -3,6 +3,8 @@ package br.com.natzuj.cm.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.natzuj.cm.excecao.ExplosaoException;
+
 public class Tabuleiro {
     private int linhas, colunas, minas;
 
@@ -21,9 +23,9 @@ public class Tabuleiro {
     private void sortearMinas() {
         long minasArmadas = 0;
         do {
-            minasArmadas = campos.stream().filter(c -> c.isMinado()).count();
             int aleatorio = (int) (Math.random() * campos.size());
             campos.get(aleatorio).minar();
+            minasArmadas = campos.stream().filter(c -> c.isMinado()).count();
         } while (minasArmadas < minas);
     }
 
@@ -45,14 +47,23 @@ public class Tabuleiro {
     }
 
     public void abrir(int linha, int coluna) {
-        campos.stream().filter(c -> c.getLinha() == linha && c.getColuna() == coluna)
-                .findFirst().ifPresent(c -> c.abrir());
+        try {
+            campos.stream().filter(c -> c.getLinha() == linha && c.getColuna() == coluna)
+                    .findFirst().ifPresent(c -> c.abrir());
+        } catch (ExplosaoException e) {
+            campos.forEach(c -> c.setAberto(true));
+            throw e;
+        }
     }
 
     public void alternarMarcacao(int linha, int coluna) {
         campos.stream().filter(c -> c.getLinha() == linha && c.getColuna() == coluna)
                 .findFirst().ifPresent(c -> c.alternarMarcacao());
-        
+
+    }
+    
+    public void alternarMarcacaoHack() {
+        campos.stream().filter(c -> c.isMinado() && c.isFechado()).forEach(c -> c.alternarMarcacao());
     }
 
     private void gerarCampos() {

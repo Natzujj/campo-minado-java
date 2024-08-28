@@ -56,9 +56,10 @@ public class TabuleiroConsole {
                     tabuleiro.alternarMarcacao(xy.next(), xy.next());
                 }
             }
-
+            System.out.println(tabuleiro);
             System.out.println("Voce Ganhou! Parabens!");
         } catch (ExplosaoException e) {
+            System.out.println(tabuleiro);
             System.out.println("Voce Perdeu!");
         }
     }
@@ -69,6 +70,8 @@ public class TabuleiroConsole {
 
         if ("sair".equalsIgnoreCase(digitado)) {
             throw new SairException();
+        } else if ("hack".equalsIgnoreCase(digitado)) {
+            tabuleiro.alternarMarcacaoHack();
         }
 
         return digitado;
