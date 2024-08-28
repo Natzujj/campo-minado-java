@@ -76,8 +76,20 @@ public class Tabuleiro {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
+
+        sb.append("  ");
+        for (int c = 0; c < colunas; c++) {
+            sb.append(" ");
+            sb.append("\u001B[4m" + c + "\u001B[0m");
+            sb.append(" ");
+        }
+        sb.append("\n");
+        sb.append("\n");
+
         int i = 0;
         for (int l = 0; l < linhas; l++) {
+            sb.append(l);
+            sb.append("|");
             for (int c = 0; c < colunas; c++) {
                 sb.append(" ");
                 sb.append(campos.get(i));
